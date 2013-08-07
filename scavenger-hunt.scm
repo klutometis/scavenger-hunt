@@ -97,3 +97,11 @@
               row))
            worksheet))))
 
+(define twilio-write write-shtml-as-html)
+
+(define (twilio-response response)
+  `(Response ,response))
+
+(define (twilio-write-sms sms)
+  (twilio-write (twilio-response `(Sms ,sms))))
+
