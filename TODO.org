@@ -88,7 +88,8 @@
           (map (lambda (row)
                  (alist-map
                   (lambda (column content)
-                    (cons (alist-ref/default header column #f)
+                    (cons (string->symbol
+                           (alist-ref/default header column "*none*"))
                           content))
                   row))
                worksheet))))
