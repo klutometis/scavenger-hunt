@@ -137,3 +137,31 @@
             team))
          teams)))
 
+(call-with-dynamic-fastcgi-query
+ (lambda (query)
+   (match (query-any query 'path-info)
+     ("/start"
+      (progress (make-hash-table))
+      (teams (make-teams))
+      (hunt (worksheet->alists (parse-worksheet (hunt-worksheet))))
+      (for-each (lambda (team)
+                  (debug (alist-ref/default team 'phone-number #f)))
+        (teams))
+      (display-content-type-&c. 'html)
+      (write-shtml-as-html
+       `(html
+         (head (title "Scavenger Hunt"))
+         (body (p "Race started! "
+                  (a (@ (href "..")) "Return")
+                  ".")))))
+     ("/sms"
+      (display-content-type-&c. 'xml)
+      (twilio-write-sms "Harro!"))
+     (_ (display-content-type-&c. 'html)
+        (write-shtml-as-html
+         `(html
+           (head (title "Scavenger Hunt"))
+           (body (p (a (@ (href "start")) "Start")
+                    " the scavenger hunt or "
+                    (a (@ (href ,(edit-worksheet))) "edit")
+                    " it."))))))))
