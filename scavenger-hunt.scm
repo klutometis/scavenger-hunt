@@ -137,13 +137,15 @@
 (define (make-teams)
   (let ((teams (make-hash-table)))
     (for-each (lambda (team)
-                (hash-table-set!
-                 teams
-                 (alist-ref/default team 'phone-number #f)
-                 (make-player
-                  (alist-ref/default team 'team-name #f)
-                  (alist-ref/default team 'participant #f)
-                  (alist-ref/default team 'phone-number #f))))
+                (let ((phone (normalize-phone
+                              (alist-ref/default team 'phone-number "000-000-0000"))))
+                  (hash-table-set!
+                   teams
+                   phone
+                   (make-player
+                    (alist-ref/default team 'team-name #f)
+                    (alist-ref/default team 'participant #f)
+                    phone))))
       (worksheet->alists (parse-worksheet (teams-worksheet))))
     teams))
 
