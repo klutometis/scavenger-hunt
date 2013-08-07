@@ -3,6 +3,7 @@
 (use alist-lib
      call-with-query
      debug
+     define-record-and-printer
      html-parser
      http-client
      irregex
@@ -123,30 +124,71 @@
 
 (define progress (make-parameter #f))
 
+(define start (make-parameter #f))
+
 (define (normalize-phone phone)
   (format "+1~a" (irregex-replace/all '(seq (~ num)) phone)))
 
+(define-record-and-printer player
+  team
+  name
+  phone)
+
 (define (make-teams)
-  (let ((teams (worksheet->alists (parse-worksheet (teams-worksheet)))))
-    (map (lambda (team)
-           (alist-map
-            (lambda (key value)
-              (if (eq? key 'phone-number)
-                  (cons key (normalize-phone value))
-                  (cons key value)))
-            team))
-         teams)))
+  (let ((teams (make-hash-table)))
+    (for-each (lambda (team)
+                (hash-table-set!
+                 teams
+                 (alist-ref/default team 'phone-number #f)
+                 (make-player
+                  (alist-ref/default team 'team-name #f)
+                  (alist-ref/default team 'participant #f)
+                  (alist-ref/default team 'phone-number #f))))
+      (worksheet->alists (parse-worksheet (teams-worksheet))))
+    teams))
+
+(define-record-and-printer stage
+  clue
+  secret
+  next)
+
+(define (hunt-start hunt-sheet)
+  (alist-ref (car hunt-sheet) 'stage))
+
+(define (make-hunt)
+  (let* ((hunt-sheet (worksheet->alists (parse-worksheet (hunt-worksheet))))
+         (start (hunt-start hunt-sheet)))
+    (let ((hunt (make-hash-table)))
+      (for-each (lambda (hunt-row)
+                  (hash-table-set!
+                   hunt
+                   (alist-ref/default hunt-row 'stage #f)
+                   (make-stage
+                    (alist-ref/default hunt-row 'clue #f)
+                    (alist-ref/default hunt-row 'secret #f)
+                    (alist-ref/default hunt-row 'next-stage #f))))
+        hunt-sheet)
+      (values start hunt))))
+
+(define-record-and-printer finished)
+(define finished (make-finished))
+
+(define started? (make-parameter #f))
+
+(define (start!)
+  (progress (make-hash-table))
+  (teams (make-teams))
+  (call-with-values (lambda () (make-hunt))
+    (lambda (made-start made-hunt)
+      (start made-start)
+      (hunt made-hunt)))
+  (started? #t))
 
 (call-with-dynamic-fastcgi-query
  (lambda (query)
    (match (query-any query 'path-info)
      ("/start"
-      (progress (make-hash-table))
-      (teams (make-teams))
-      (hunt (worksheet->alists (parse-worksheet (hunt-worksheet))))
-      (for-each (lambda (team)
-                  (debug (alist-ref/default team 'phone-number #f)))
-        (teams))
+      (start!)
       (display-content-type-&c. 'html)
       (write-shtml-as-html
        `(html
@@ -155,8 +197,33 @@
                   (a (@ (href "..")) "Return")
                   ".")))))
      ("/sms"
+      (unless (started?) (start!))
       (display-content-type-&c. 'xml)
-      (twilio-write-sms "Harro!"))
+      (let* ((phone (query-any query 'From))
+             (stage-name (hash-table-ref/default (progress) phone (start)))
+             (stage (hash-table-ref/default (hunt) stage-name finished)))
+        (if (finished? stage)
+            (twilio-write-sms "You've already finished!")
+            (let ((guess (query-any query 'Body)))
+              (if (string=? (string-downcase (stage-secret stage))
+                            (string-downcase guess))
+                  (let ((stage-next-name (stage-next stage)))
+                    (if stage-next-name
+                        (let ((stage-next (hash-table-ref/default
+                                           (hunt)
+                                           stage-next-name
+                                           #f)))
+                          (if stage-next
+                              (begin
+                                (hash-table-set! (progress) phone stage-next-name)
+                                (twilio-write-sms (stage-clue stage-next)))
+                              (begin
+                                (hash-table-set! (progress) phone finished)
+                                (twilio-write-sms "You're in no-man's land!"))))
+                        (begin
+                          (hash-table-set! (progress) phone finished)
+                          (twilio-write-sms "Congratulations, you've finished!"))))
+                  (twilio-write-sms "Nope; try again!"))))))
      (_ (display-content-type-&c. 'html)
         (write-shtml-as-html
          `(html
