@@ -184,6 +184,10 @@
     (lambda (made-start made-hunt)
       (start made-start)
       (hunt made-hunt)))
+  (let ((clue (stage-clue (hash-table-ref (hunt) (start)))))
+    (hash-table-walk (teams)
+      (lambda (phone player)
+        (twilio-send-sms phone clue))))
   (started? #t))
 
 (call-with-dynamic-fastcgi-query
