@@ -97,6 +97,3 @@
               row))
            worksheet))))
 
-(debug
- (worksheet->alists (parse-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od6/public/basic"))
- (worksheet->alists (parse-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od7/public/basic")))
