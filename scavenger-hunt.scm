@@ -216,9 +216,7 @@
       (write-shtml-as-html
        `(html
          (head (title "Scavenger Hunt"))
-         (body (p "Race started! "
-                  (a (@ (href "..")) "Return")
-                  ".")))))
+         (body (p "Race started!")))))
      ("/sms"
       (unless (started?) (start!))
       (display-content-type-&c. 'xml)
