@@ -6,7 +6,6 @@
          http-client
          irregex
          matchable
-         medea
          srfi-95
          sxml-transforms
          sxpath)
@@ -94,5 +93,8 @@
                   row))
                worksheet))))
     
-    (worksheet->alists (parse-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od6/public/basic"))
+    (debug
+     (worksheet->alists (parse-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od6/public/basic"))
+     (worksheet->alists (parse-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od7/public/basic")))
+    
   #+END_SRC
