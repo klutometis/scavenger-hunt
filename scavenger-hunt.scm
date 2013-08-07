@@ -190,6 +190,23 @@
         (twilio-send-sms phone clue))))
   (started? #t))
 
+(define twilio-sid (make-parameter (get-environment-variable "TWILIO_SID")))
+
+(define twilio-auth (make-parameter (get-environment-variable "TWILIO_AUTH")))
+
+(define twilio-from (make-parameter (get-environment-variable "TWILIO_FROM")))
+
+(define (twilio-send-sms to body)
+   (with-input-from-request
+    (format "https://~a:~a@api.twilio.com/2010-04-01/Accounts/~a/SMS/Messages"
+            (twilio-sid)
+            (twilio-auth)
+            (twilio-sid))
+    `((From . ,(twilio-from))
+      (To . ,to)
+      (Body . ,body))
+    void))
+
 (call-with-dynamic-fastcgi-query
  (lambda (query)
    (match (query-any query 'path-info)
