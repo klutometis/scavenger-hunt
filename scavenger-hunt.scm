@@ -105,3 +105,15 @@
 (define (twilio-write-sms sms)
   (twilio-write (twilio-response `(Sms ,sms))))
 
+(define hunt-worksheet
+  (make-parameter
+   "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od6/public/basic"))
+
+(define teams-worksheet
+  (make-parameter
+   "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od7/public/basic"))
+
+(define edit-worksheet
+  (make-parameter
+   "https://docs.google.com/spreadsheet/ccc?key=0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE&usp=sharing"))
+
