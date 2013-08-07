@@ -1,6 +1,7 @@
 #!/usr/bin/env chicken-scheme
 
 (use alist-lib
+     call-with-query
      debug
      html-parser
      http-client
