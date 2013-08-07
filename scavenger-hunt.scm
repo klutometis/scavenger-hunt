@@ -11,6 +11,9 @@
      sxml-transforms
      sxpath)
 
+(require-library htmlprag)
+(import (only htmlprag write-shtml-as-html))
+
 (define (node-children node)
   ((sxpath '((*not* @))) node))
     
