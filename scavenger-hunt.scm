@@ -117,3 +117,23 @@
   (make-parameter
    "https://docs.google.com/spreadsheet/ccc?key=0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE&usp=sharing"))
 
+(define teams (make-parameter #f))
+
+(define hunt (make-parameter #f))
+
+(define progress (make-parameter #f))
+
+(define (normalize-phone phone)
+  (format "+1~a" (irregex-replace/all '(seq (~ num)) phone)))
+
+(define (make-teams)
+  (let ((teams (worksheet->alists (parse-worksheet (teams-worksheet)))))
+    (map (lambda (team)
+           (alist-map
+            (lambda (key value)
+              (if (eq? key 'phone-number)
+                  (cons key (normalize-phone value))
+                  (cons key value)))
+            team))
+         teams)))
+
