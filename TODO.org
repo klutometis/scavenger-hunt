@@ -98,3 +98,5 @@
      (worksheet->alists (parse-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od7/public/basic")))
     
   #+END_SRC
+* TODO Need some persistent storage so we can parallelize this.
+  Redis, BDB? See unqlite’s [[http://unqlite.org/api_intro.html#doc_store][document store interface]]; see [[http://unqlite.org/intro.html][intro]].
