@@ -39,8 +39,6 @@
    #f
    html->sxml))
 
-;; (debug (worksheets "0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE"))
-
 (define (column+row column-row)
   (let ((column-row (irregex-match '(seq (submatch-named column (+ alpha))
                                          (submatch-named row (+ num)))
@@ -108,15 +106,15 @@
 
 (define hunt-worksheet
   (make-parameter
-   "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od6/public/basic"))
+   (get-environment-variable "HUNT_WORKSHEET")))
 
 (define teams-worksheet
   (make-parameter
-   "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od7/public/basic"))
+   (get-environment-variable "TEAMS_WORKSHEET")))
 
 (define edit-worksheet
   (make-parameter
-   "https://docs.google.com/spreadsheet/ccc?key=0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE&usp=sharing"))
+   (get-environment-variable "EDIT_WORKSHEET")))
 
 (define teams (make-parameter #f))
 
