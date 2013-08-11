@@ -100,3 +100,69 @@
   #+END_SRC
 * TODO Need some persistent storage so we can parallelize this.
   Redis, BDB? See unqlite’s [[http://unqlite.org/api_intro.html#doc_store][document store interface]]; see [[http://unqlite.org/intro.html][intro]].
+* Notes
+** Wed Aug  7 14:37:30 CDT 2013
+   - Date: August 31st
+   - Configurable “try again” messages, based on the number of times
+     they’ve gotten it wrong?
+   - 3 clues, progress after every wrong try; culminating in phone call
+   - Status update thing
+   - From the start, counter that they start with; each time they get
+     a wrong answer, e.g. 1 min bump; phone call, e.g. 5 min bump
+   - Each team probably has a liaison
+   - Each team has one number and one phone
+   - Team solving multiple things at the same time
+   - Admin, point to a team and doc them; automatically 5 minutes.
+   - Commands: repeat
+   - Email: images plus attachment; send-grid?
+   - Score: time required to successfully submit last clue.
+   - Sequence of questions: slot team into next available (ideally
+     unoccupied) sequence of clues.
+   - Status overview page: team, stage, score?
+   - Details page: breakdown of what was answered when.
+   - Team, stage, clues
+   - Time required to finish sequence of clues
+   - Out of town until next Wednesday; let’s say Thursday the 15th.
+   - Status, voice, minimizing traffic and enforcing order, Facebook.
+   - Proof of concept without sendgrid.
+   - Shoot for the 18th as a beta-testing day; another run through on
+     the 25th.
+   - August 31st: noon or oneish, hour or two.
+   - Some sort of error recovery mechanism that starts from some game
+     state: send out last clue. Begin button, which erases
+     information; vs. start from last known game state.
+   - Automated testing with “zombies”
+   - “Text this number with your team name”
+** June 25
+   - Two potential messages: one to the team describing the next
+     obstactle; one to everybody, annoucing that the team completed the
+     event
+   - Timer-based message, if they haven’t checked in by a certain amount
+     of time
+   - Possibly score at the end of the game
+   - Ask for clue, costs a point
+   - Mass email to start with, server inaugurates the game; as opposed
+     to: I’m ready.
+   - Passphrase that they text or email back
+   - Different ways that they check in: text, email, voice
+   - End of August
+   - November
+   - 100 people, 20 teams
+   - Teams of 5
+   - 10 or 20 events
+   - Everyone at their home, all end at where the party would be
+   - End at the party
+   - People twenty
+   - All teams need to be together to get the call at e.g. 10 am
+   - Mixture of obstactles that lead to other obstacles: say, four; vs.
+     some that are independent.
+   - Interface for describing races
+   - Sequence, scene, trigger, message
+   - Clue, trigger (incoming), message (outgoing)
+   - What the question is, and how it goes out (text, email, voice)
+   - Audio clips to record
+   - Get to goal faster, lose points because they didn’t solve certain ones
+   - Enforce order
+   - Facebook messages? Befriend one account?
+   - Google spreadsheet
+   - Underwrite with gym?
