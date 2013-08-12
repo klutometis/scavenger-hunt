@@ -1,3 +1,19 @@
+* TODO
+  A hunt has sequences; sequences have stages. The first stage of a
+  sequence is a starting point.
+
+  If stages are nodes, only the nodes in a sequence have next; so we
+  can still use stages, the only difference is that . . .
+
+  Naked nodes are sequences of one; so we have: stages with next and
+  stages without next; we have: starting points.
+
+  We’ll probably store the three clues in the stage, with the notion
+  that they haven’t passed the stage until the give the secret; we’ll
+  have to track how many times they’ve guessed, though, which is a
+  little ad-hoc.
+
+  Take the time to generalize this to $n$-guesses? YAGNI.
 * TODO Let’s parse a worksheet
   #+BEGIN_SRC scheme
     (use alist-lib
