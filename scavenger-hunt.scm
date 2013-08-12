@@ -156,6 +156,29 @@
   (alist-ref (car hunt-sheet) 'stage))
 
 (define (make-hunt)
+  (let ((hunt (make-hash-table))
+        (sequences (make-hash-table))
+        (hunt-sheet (worksheet->alists (parse-worksheet (hunt-worksheet)))))
+    (let iter ((hunt-sheet hunt-sheet)
+               (previous-sequence #f)
+               (previous-stage #f))
+      (if (null? hunt-sheet)
+          hunt
+          (let ((hunt-row (car hunt-sheet)))
+            (let ((sequence (alist-ref/default hunt-row 'sequence #f))
+                  (clue (alist-ref/default hunt-row 'clue #f))
+                  (delivery (alist-ref/default hunt-row 'delivery #f))
+                  (secret (alist-ref/default hunt-row 'secret #f))
+                  (stage-name (gensym))
+                  (stage
+                   (make-stage
+                    clue
+                    secret
+                    #f)))
+              ))))
+    (for-each (lambda (hunt-row)
+            )
+      hunt-sheet))
   (let* ((hunt-sheet (worksheet->alists (parse-worksheet (hunt-worksheet))))
          (start (hunt-start hunt-sheet)))
     (let ((hunt (make-hash-table)))
