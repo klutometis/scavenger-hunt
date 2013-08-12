@@ -205,6 +205,10 @@
       (Body . ,body))
     void))
 
+(parameterize ((hunt-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od6/public/basic"))
+  (debug (hash-table->alist (make-hunt))))
+
+#;
 (call-with-dynamic-fastcgi-query
  (lambda (query)
    (match (query-any query 'path-info)
