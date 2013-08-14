@@ -360,7 +360,7 @@
            (play "+16268172836"
                  "Just once more"
                  (lambda (message) (debug message))))
-        (let ((response (if (< (random-real) 0.5)
+        (let ((response (if (< (random-real) 0.25)
                             (hash-table-ref answers (clue))
                             "A wrong answer")))
           (debug response)
