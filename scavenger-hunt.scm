@@ -340,12 +340,16 @@
                            (cdr starting-points))
                           (game-state-stage-name-set! game-state stage-next-name)
                           (write (stage-clue stage-next)))))))
-            (let ((if-wrong-name (stage-if-wrong stage)))
-              (if if-wrong-name
-                  (let ((if-wrong (hash-table-ref (hunt) if-wrong-name)))
-                    (game-state-stage-name-set! game-state if-wrong-name)
-                    (write (stage-clue if-wrong)))
-                  (write "Nope; try again!")))))))
+            (begin
+              (game-state-penalty-set!
+               game-state
+               (+ (game-state-penalty game-state) 60))
+              (let ((if-wrong-name (stage-if-wrong stage)))
+                (if if-wrong-name
+                    (let ((if-wrong (hash-table-ref (hunt) if-wrong-name)))
+                      (game-state-stage-name-set! game-state if-wrong-name)
+                      (write (stage-clue if-wrong)))
+                    (write "Nope; try again!"))))))))
 
 (parameterize ((hunt-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od6/public/basic")
                (teams-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od7/public/basic"))
