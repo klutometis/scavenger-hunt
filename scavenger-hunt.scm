@@ -391,6 +391,10 @@
       (let ((phone (query-any query 'From))
             (body (query-any query 'Body)))
         (play phone body twilio-write-sms)))
+     ("/status"
+      (unless (started?) (start! twilio-send-sms))
+      (display-status-&c.)
+      (pp (hash-table->alist (progress))))
      (_ (display-content-type-&c. 'html)
         (write-shtml-as-html
          `(html
