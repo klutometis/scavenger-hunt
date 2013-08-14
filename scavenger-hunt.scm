@@ -157,14 +157,16 @@
                    (make-player
                     (alist-ref/default team 'team-name #f)
                     (alist-ref/default team 'participant #f)
-                    phone))))
+                    phone
+                    (alist-ref/default team 'email #f)))))
       (worksheet->alists (parse-worksheet (teams-worksheet))))
     teams))
 
 (define-record-and-printer stage
   clue
   secret
-  next)
+  next
+  if-wrong)
 
 (define (hunt-start hunt-sheet)
   (alist-ref (car hunt-sheet) 'stage))
