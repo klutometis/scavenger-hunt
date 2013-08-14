@@ -375,7 +375,6 @@
                      (clue message))))))
       (debug (hash-table->alist (progress))))))
 
-#;
 (call-with-dynamic-fastcgi-query
  (lambda (query)
    (match (query-any query 'path-info)
