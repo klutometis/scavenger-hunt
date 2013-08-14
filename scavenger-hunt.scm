@@ -131,7 +131,7 @@
   penalty)
 
 (define (make-shuffled-game-state starting-points)
-  (make-game-state #f (shuffle starting-points)))
+  (make-game-state #f (shuffle starting-points) (current-seconds) 0))
 
 (define progress (make-parameter #f))
 
