@@ -143,7 +143,8 @@
 (define-record-and-printer player
   team
   name
-  phone)
+  phone
+  email)
 
 (define (make-teams)
   (let ((teams (make-hash-table)))
