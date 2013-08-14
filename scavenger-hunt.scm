@@ -126,7 +126,9 @@
 
 (define-record-and-printer game-state
   stage-name
-  starting-points)
+  starting-points
+  start-time
+  penalty)
 
 (define (make-shuffled-game-state starting-points)
   (make-game-state #f (shuffle starting-points)))
