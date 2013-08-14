@@ -313,7 +313,10 @@
   ;; Cover the case of the unexpected player. Teamless? Who cares
   ;; about the team lookup, at this point. At some point: parity
   ;; between phone, email, facebook.
-  (let* ((game-state (hash-table-ref/default (progress) player (make-game-state #f '())))
+  (let* ((game-state (hash-table-ref/default
+                      (progress)
+                      player
+                      (make-game-state #f '() (current-seconds) 0)))
          (stage (hash-table-ref/default (hunt) (game-state-stage-name game-state) finished)))
     (if (finished? stage)
         (write "You've already finished!")
