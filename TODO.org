@@ -1,3 +1,7 @@
+* TODO Graph describing the game as we understand it.
+  This falls under status and can be done at start-time.
+* TODO Facebook
+  [[https://developers.facebook.com/docs/opengraph/howtos/publishing-with-app-token/][App access token]] doesn’t expire; something about [[https://developers.facebook.com/docs/opengraph/howtos/publishing-with-app-token/][long-term token]].
 * TODO =game-state= should have start time and penalty.
 * TODO Test the case where an unexpected phone-number texts.
 * TODO Implement a status page.
