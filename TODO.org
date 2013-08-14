@@ -1,3 +1,4 @@
+* TODO =game-state= should have start time and penalty.
 * TODO Test the case where an unexpected phone-number texts.
 * TODO Implement a status page.
   We should go ahead and record events for the hell of it.
