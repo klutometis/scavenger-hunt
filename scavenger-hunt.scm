@@ -386,7 +386,7 @@
          (head (title "Scavenger Hunt"))
          (body (p "Race started!")))))
      ("/sms"
-      (unless (started?) (start!))
+      (unless (started?) (start! twilio-send-sms))
       (display-content-type-&c. 'xml)
       (let ((phone (query-any query 'From))
             (body (query-any query 'Body)))
