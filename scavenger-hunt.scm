@@ -180,12 +180,16 @@
         (hunt-sheet (worksheet->alists (parse-worksheet (hunt-worksheet)))))
     (let iter ((hunt-sheet hunt-sheet)
                (previous-sequence #f)
+               (previous-subsequence #f)
+               (previous-stage-name #f)
                (previous-stage #f)
-               (starting-points '()))
+               (starting-points '())
+               (subsequence-names '()))
       (if (null? hunt-sheet)
           (values hunt starting-points)
           (let ((hunt-row (car hunt-sheet)))
             (let ((sequence (alist-ref/default hunt-row 'sequence #f))
+                  (subsequence (alist-ref/default hunt-row 'subsequence #f))
                   (clue (alist-ref/default hunt-row 'clue #f))
                   (delivery (alist-ref/default hunt-row 'delivery #f))
                   (secret (alist-ref/default hunt-row 'secret #f))
@@ -194,21 +198,73 @@
                      (make-stage
                       clue
                       secret
+                      #f
                       #f)))
                 (hash-table-set! hunt stage-name stage)
                 (if (and previous-sequence
                          previous-stage
                          (string=? sequence previous-sequence))
-                    (begin
-                      (stage-next-set! previous-stage stage-name)
-                      (iter (cdr hunt-sheet)
-                            sequence
-                            stage
-                            starting-points))
-                    (iter (cdr hunt-sheet)
-                          sequence
-                          stage
-                          (cons stage-name starting-points))))))))))
+                    (if previous-subsequence
+                        (if (and subsequence
+                                 (string=? subsequence previous-subsequence))
+                            (begin
+                              (stage-if-wrong-set! previous-stage stage-name)
+                              (iter (cdr hunt-sheet)
+                                    sequence
+                                    subsequence
+                                    stage-name
+                                    stage
+                                    starting-points
+                                    (cons previous-stage-name subsequence-names)))
+                            (begin
+                              (for-each
+                                  (lambda (subsequence-name)
+                                    (stage-next-set!
+                                     (hash-table-ref
+                                      hunt
+                                      subsequence-name)
+                                     stage-name))
+                                (cons previous-stage-name subsequence-names))
+                              (iter (cdr hunt-sheet)
+                                    sequence
+                                    subsequence
+                                    stage-name
+                                    stage
+                                    starting-points
+                                    '())))
+                        (begin
+                          (stage-next-set! previous-stage stage-name)
+                          (iter (cdr hunt-sheet)
+                                sequence
+                                subsequence
+                                stage-name
+                                stage
+                                starting-points
+                                '()))) 
+                    (if (null? subsequence-names)
+                        (iter (cdr hunt-sheet)
+                              sequence
+                              subsequence
+                              stage-name
+                              stage
+                              (cons stage-name starting-points)
+                              '())
+                        (begin
+                          (for-each
+                              (lambda (subsequence-name)
+                                (stage-next-set!
+                                 (hash-table-ref
+                                  hunt
+                                  subsequence-name)
+                                 stage-name))
+                            (cons previous-stage-name subsequence-names))
+                          (iter (cdr hunt-sheet)
+                                sequence
+                                subsequence
+                                stage-name
+                                stage
+                                (cons stage-name starting-points)
+                                '())))))))))))
 
 (define-record-and-printer finished)
 (define finished (make-finished))
