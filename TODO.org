@@ -1,4 +1,7 @@
-* TODO
+* TODO Test the case where an unexpected phone-number texts.
+* TODO Implement a status page.
+  We should go ahead and record events for the hell of it.
+* TODO Implement 3 guesses.
   A hunt has sequences; sequences have stages. The first stage of a
   sequence is a starting point.
 
