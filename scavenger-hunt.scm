@@ -182,7 +182,6 @@
                (previous-sequence #f)
                (previous-subsequence #f)
                (previous-stage-name #f)
-               (previous-stage #f)
                (starting-points '())
                (subsequence-names '()))
       (if (null? hunt-sheet)
@@ -202,18 +201,18 @@
                       #f)))
                 (hash-table-set! hunt stage-name stage)
                 (if (and previous-sequence
-                         previous-stage
+                         previous-stage-name
                          (string=? sequence previous-sequence))
                     (if previous-subsequence
                         (if (and subsequence
                                  (string=? subsequence previous-subsequence))
-                            (begin
+                            (let ((previous-stage
+                                   (hash-table-ref hunt previous-stage-name)))
                               (stage-if-wrong-set! previous-stage stage-name)
                               (iter (cdr hunt-sheet)
                                     sequence
                                     subsequence
                                     stage-name
-                                    stage
                                     starting-points
                                     (cons previous-stage-name subsequence-names)))
                             (begin
@@ -229,16 +228,15 @@
                                     sequence
                                     subsequence
                                     stage-name
-                                    stage
                                     starting-points
                                     '())))
-                        (begin
+                        (let ((previous-stage
+                               (hash-table-ref hunt previous-stage-name)))
                           (stage-next-set! previous-stage stage-name)
                           (iter (cdr hunt-sheet)
                                 sequence
                                 subsequence
                                 stage-name
-                                stage
                                 starting-points
                                 '()))) 
                     (if (null? subsequence-names)
@@ -246,14 +244,12 @@
                               sequence
                               subsequence
                               stage-name
-                              stage
                               (cons stage-name starting-points)
                               '())
                         (iter (cdr hunt-sheet)
                               sequence
                               subsequence
                               stage-name
-                              stage
                               (cons stage-name starting-points)
                               '()))))))))))
 
