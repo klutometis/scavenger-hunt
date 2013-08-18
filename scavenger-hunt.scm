@@ -249,22 +249,13 @@
                               stage
                               (cons stage-name starting-points)
                               '())
-                        (begin
-                          (for-each
-                              (lambda (subsequence-name)
-                                (stage-next-set!
-                                 (hash-table-ref
-                                  hunt
-                                  subsequence-name)
-                                 stage-name))
-                            (cons previous-stage-name subsequence-names))
-                          (iter (cdr hunt-sheet)
-                                sequence
-                                subsequence
-                                stage-name
-                                stage
-                                (cons stage-name starting-points)
-                                '())))))))))))
+                        (iter (cdr hunt-sheet)
+                              sequence
+                              subsequence
+                              stage-name
+                              stage
+                              (cons stage-name starting-points)
+                              '()))))))))))
 
 (define-record-and-printer finished)
 (define finished (make-finished))
