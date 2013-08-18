@@ -351,29 +351,29 @@
                       (write (stage-clue if-wrong)))
                     (write "Nope; try again!"))))))))
 
-#;
-(parameterize ((hunt-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od6/public/basic")
-               (teams-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od7/public/basic"))
-  (let ((clue (make-parameter #f)))
-    (start! (lambda (recipient message) (debug message) (clue message)))
-    (let ((answers (make-hash-table)))
-      (hash-table-walk (hunt)
-        (lambda (stage-name stage)
-          (hash-table-set! answers (stage-clue stage) (stage-secret stage))))
-      (do ()
-          ((string=? (clue) "Congratulations, you've finished!")
-           (play "+16268172836"
-                 "Just once more"
-                 (lambda (message) (debug message))))
-        (let ((response (if (< (random-real) 0.25)
-                            (hash-table-ref answers (clue))
-                            "A wrong answer")))
-          (debug response)
-          (play "+16268172836" response
-                (lambda (message) (debug message)
-                   (unless (string=? message "Nope; try again!")
-                     (clue message))))))
-      (debug (hash-table->alist (progress))))))
+;; (parameterize ((hunt-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od6/public/basic")
+;;                (teams-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od7/public/basic"))
+;;   (let ((clue (make-parameter #f)))
+;;     (start! (lambda (recipient message) (debug message) (clue message)))
+;;     (debug (hash-table->alist (hunt)))
+;;     (let ((answers (make-hash-table)))
+;;       (hash-table-walk (hunt)
+;;         (lambda (stage-name stage)
+;;           (hash-table-set! answers (stage-clue stage) (stage-secret stage))))
+;;       (do ()
+;;           ((string=? (clue) "Congratulations, you've finished!")
+;;            (play "+16268172836"
+;;                  "Just once more"
+;;                  (lambda (message) (debug message))))
+;;         (let ((response (if (< (random-real) 0.25)
+;;                             (hash-table-ref answers (clue))
+;;                             "A wrong answer")))
+;;           (debug response)
+;;           (play "+16268172836" response
+;;                 (lambda (message) (debug message)
+;;                    (unless (string=? message "Nope; try again!")
+;;                      (clue message))))))
+;;       (debug (hash-table->alist (progress))))))
 
 (call-with-dynamic-fastcgi-query
  (lambda (query)
