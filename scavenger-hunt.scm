@@ -9,6 +9,7 @@
      irregex
      matchable
      random-bsd
+     srfi-13
      srfi-95
      sxml-transforms
      sxpath)
@@ -307,8 +308,8 @@
          (stage (hash-table-ref/default (hunt) (game-state-stage-name game-state) finished)))
     (if (finished? stage)
         (write "You've already finished!")
-        (if (string=? (string-downcase (stage-secret stage))
-                      (string-downcase guess))
+        (if (string=? (string-trim-both (string-downcase (stage-secret stage)))
+                      (string-trim-both (string-downcase guess)))
             (let ((stage-next-name (stage-next stage)))
               (if stage-next-name
                   (let ((stage-next (hash-table-ref (hunt) stage-next-name)))
