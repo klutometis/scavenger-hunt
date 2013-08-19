@@ -1,3 +1,4 @@
 RewriteEngine on
 RewriteCond %{REQUEST_URI} !/scavenger-hunt.scm
+RewriteCond %{REQUEST_URI} !/twiml.xml
 RewriteRule (.*) scavenger-hunt.scm/$1
