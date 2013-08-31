@@ -12,7 +12,8 @@
      srfi-13
      srfi-95
      sxml-transforms
-     sxpath)
+     sxpath
+     twilio)
 
 (require-library htmlprag)
 (import (only htmlprag write-shtml-as-html))
@@ -101,14 +102,6 @@
               row))
            worksheet))))
 
-(define twilio-write write-shtml-as-html)
-
-(define (twilio-response response)
-  `(Response ,response))
-
-(define (twilio-write-sms sms)
-  (twilio-write (twilio-response `(Sms ,sms))))
-
 (define hunt-worksheet
   (make-parameter
    (get-environment-variable "HUNT_WORKSHEET")))
@@ -191,7 +184,6 @@
             (let ((sequence (alist-ref/default hunt-row 'sequence #f))
                   (subsequence (alist-ref/default hunt-row 'subsequence #f))
                   (clue (alist-ref/default hunt-row 'clue #f))
-                  (delivery (alist-ref/default hunt-row 'delivery #f))
                   (secret (alist-ref/default hunt-row 'secret #f))
                   (stage-name (intern (gensym))))
               (let ((stage
@@ -280,23 +272,6 @@
           (send phone clue)))))
   (started? #t))
 
-(define twilio-sid (make-parameter (get-environment-variable "TWILIO_SID")))
-
-(define twilio-auth (make-parameter (get-environment-variable "TWILIO_AUTH")))
-
-(define twilio-from (make-parameter (get-environment-variable "TWILIO_FROM")))
-
-(define (twilio-send-sms to body)
-   (with-input-from-request
-    (format "https://~a:~a@api.twilio.com/2010-04-01/Accounts/~a/SMS/Messages"
-            (twilio-sid)
-            (twilio-auth)
-            (twilio-sid))
-    `((From . ,(twilio-from))
-      (To . ,to)
-      (Body . ,body))
-    void))
-
 (define (play player guess write)
   ;; Cover the case of the unexpected player. Teamless? Who cares
   ;; about the team lookup, at this point. At some point: parity
@@ -339,11 +314,15 @@
                       (write (stage-clue if-wrong)))
                     (write "Nope; try again!"))))))))
 
+(define (twilio-write-sms text)
+  (twilio-write (twilio-response (twilio-sms text))))
+
 ;; (parameterize ((hunt-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od6/public/basic")
 ;;                (teams-worksheet "https://spreadsheets.google.com/feeds/cells/0AnvJq9OyBeoUdGJ3SXpHZE8xUzZocWQ4c1ZCcndXNUE/od7/public/basic"))
 ;;   (let ((clue (make-parameter #f)))
 ;;     (start! (lambda (recipient message) (debug message) (clue message)))
-;;     (debug (hash-table->alist (hunt)))
+;;     ;; (debug (hash-table->alist (hunt))
+;;     ;;        (hash-table->alist (teams)))
 ;;     (let ((answers (make-hash-table)))
 ;;       (hash-table-walk (hunt)
 ;;         (lambda (stage-name stage)
